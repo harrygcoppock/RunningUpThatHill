@@ -20,7 +20,7 @@ n_head = 4
 n_embd = 256
 block_size = 256
 batch_size = 64
-learning_rate = 6e-4
+learning_rate = 3e-4
 seed = 1337
 out_dir = "out"
 for arg in sys.argv[1:]:
