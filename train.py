@@ -49,8 +49,8 @@ def get_batch():
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
-model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
-model = torch.compile(model)
+raw = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
+model = torch.compile(raw)
 print(f"{sum(p.numel() for p in model.parameters()):,} parameters on {device}")
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
@@ -69,4 +69,4 @@ while time.time() - t0 < time_budget:
         print(f"step {step} | loss {loss.item():.4f} | {elapsed:.0f}s | {step * batch_size * block_size / elapsed:,.0f} tok/s")
 
 print(f"done: {step} steps, {step * batch_size * block_size:,} tokens in {time.time() - t0:.0f}s")
-save_model(model, out_dir)
+save_model(raw, out_dir)
