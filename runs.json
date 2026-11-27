@@ -337,7 +337,7 @@
   "title": "FlashAttention via scaled_dot_product_attention",
   "change": "manual attention -> fused FlashAttention (`F.scaled_dot_product_attention`, `is_causal=True`)",
   "date": "2026-11-27T12:17:32+00:00",
-  "merged": false,
+  "merged": true,
   "bpb": 2.0223,
   "size": 13445632,
   "params": 3356672,
