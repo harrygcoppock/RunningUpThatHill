@@ -11,7 +11,7 @@ import torch
 import torch.nn.functional as F
 
 from model import GPT, GPTConfig, save_model
-from tokenizer import load_tokenizer
+from tokenizer import train_tokenizer
 
 
 class Muon(torch.optim.Optimizer):
@@ -69,9 +69,11 @@ torch.manual_seed(seed)
 np.random.seed(seed)
 os.makedirs(out_dir, exist_ok=True)
 
-tok = load_tokenizer(out_dir)
 with open("data/train.txt", "rb") as f:
-    data = tok.encode(f.read())
+    text = f.read()
+tok = train_tokenizer(text, out_dir)
+data = tok.encode(text)
+del text
 
 
 def get_batch():
