@@ -1072,7 +1072,7 @@
   "title": "Add lossless frequent byte-pair tokenization",
   "change": "replace byte-only tokenization with lossless byte tokens plus 256 frequent byte pairs.",
   "date": "2026-11-27T13:09:04+00:00",
-  "merged": false,
+  "merged": true,
   "bpb": 1.9894,
   "size": 13971991,
   "params": 3487744,
