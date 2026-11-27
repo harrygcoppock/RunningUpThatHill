@@ -28,11 +28,7 @@ class CausalSelfAttention(nn.Module):
         q, k, v = self.qkv(x).split(C, dim=2)
         # (B, T, C) -> (B, n_head, T, head_dim)
         q, k, v = (t.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) for t in (q, k, v))
-        # Fused attention (FlashAttention / memory-efficient kernel): softmax(QK^T/sqrt(d))V is computed
-        # tile by tile in SRAM, so the (T, T) attention matrix is never written to HBM. is_causal=True
-        # applies the same no-peeking mask as before.
         y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
-        y = y.transpose(1, 2).reshape(B, T, C)
         return self.proj(y)
 
 
