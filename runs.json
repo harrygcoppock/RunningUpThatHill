@@ -538,5 +538,147 @@
     1.9973
    ]
   ]
+ },
+ {
+  "job": "golf-pr5-c4fe7e6-1127-121951",
+  "pr": 5,
+  "sha": "c4fe7e6",
+  "author": "KOLESNiii",
+  "title": "Mixture of Experts MLP (DeepSeek-style, aux-loss-free balancing)",
+  "change": "dense MLP -> mixture of experts (1 shared + top-2 of 8 routed experts, aux-loss-free balancing)",
+  "date": "2026-11-27T12:43:37+00:00",
+  "merged": false,
+  "bpb": 2.1565,
+  "size": 15654786,
+  "params": 3898368,
+  "steps": 3123,
+  "tokens": 51167232,
+  "sample": "Deep Learning is all about the sensitive canager with riduff and the bill on therape organization would out for instead of power comming. All Mile Cycloses is to send a breaking and a sick one ten Wilmanness series with\nthe following on the friend are most a dutigor season disney whose when \u2018a few amount potter to its pres",
+  "curve": [
+   [
+    10,
+    3.8657
+   ],
+   [
+    19,
+    3.6663
+   ],
+   [
+    29,
+    3.6059
+   ],
+   [
+    38,
+    3.4335
+   ],
+   [
+    47,
+    3.1441
+   ],
+   [
+    57,
+    2.9193
+   ],
+   [
+    66,
+    2.8153
+   ],
+   [
+    76,
+    2.6308
+   ],
+   [
+    85,
+    2.6007
+   ],
+   [
+    95,
+    2.511
+   ],
+   [
+    104,
+    2.4201
+   ],
+   [
+    114,
+    2.4027
+   ],
+   [
+    123,
+    2.3607
+   ],
+   [
+    133,
+    2.4136
+   ],
+   [
+    142,
+    2.3212
+   ],
+   [
+    152,
+    2.2536
+   ],
+   [
+    162,
+    2.2699
+   ],
+   [
+    171,
+    2.1431
+   ],
+   [
+    181,
+    2.2141
+   ],
+   [
+    191,
+    2.2373
+   ],
+   [
+    200,
+    2.1638
+   ],
+   [
+    210,
+    2.2184
+   ],
+   [
+    220,
+    2.2115
+   ],
+   [
+    230,
+    2.1789
+   ],
+   [
+    239,
+    2.1375
+   ],
+   [
+    249,
+    2.1676
+   ],
+   [
+    259,
+    2.1329
+   ],
+   [
+    268,
+    2.1073
+   ],
+   [
+    278,
+    2.1498
+   ],
+   [
+    288,
+    2.1193
+   ],
+   [
+    298,
+    2.0812
+   ]
+  ]
  }
 ]
