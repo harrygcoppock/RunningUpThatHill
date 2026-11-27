@@ -1642,5 +1642,22 @@
     2.0172
    ]
   ]
+ },
+ {
+  "job": "golf-pr23-9006992-1127-123333",
+  "pr": 23,
+  "sha": "9006992",
+  "author": "AhmadSaidan",
+  "title": "Compile model with torch.compile on CUDA",
+  "change": "Compile the model with `torch.compile(raw_model)` on CUDA and save `raw_model` cleanly without `_orig_mod.` key prefixes",
+  "date": "2026-11-27T14:02:05+00:00",
+  "merged": false,
+  "bpb": null,
+  "size": null,
+  "params": null,
+  "steps": null,
+  "tokens": null,
+  "sample": null,
+  "curve": []
  }
 ]
