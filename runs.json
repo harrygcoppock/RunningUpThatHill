@@ -2844,5 +2844,22 @@
   "tokens": null,
   "sample": null,
   "curve": []
+ },
+ {
+  "job": "golf-pr25-44402a0-1127-153320",
+  "pr": 25,
+  "sha": "44402a0",
+  "author": "KOLESNiii",
+  "title": "GPT-2 weight initialisation",
+  "change": "PyTorch default init \u2192 GPT-2 init: weights N(0, 0.02), biases 0, residual projections N(0, 0.02/\u221a(2\u00b7n_layer))",
+  "date": "2026-11-27T17:22:28+00:00",
+  "merged": false,
+  "bpb": null,
+  "size": null,
+  "params": null,
+  "steps": null,
+  "tokens": null,
+  "sample": null,
+  "curve": []
  }
 ]
