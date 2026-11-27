@@ -45,19 +45,25 @@ def get_batch():
     y = np.stack([data[i + 1 : i + 1 + block_size] for i in ix]).astype(np.int64)
     return torch.from_numpy(x).to(device), torch.from_numpy(y).to(device)
 
+# Don't know if these actually help, but they sometimes do
+torch.backends.cuda.matmul.fp32_precision = "tf32"
+torch.backends.cuda.matmul.allow_tf32 = True
+torch.backends.cudnn.allow_tf32 = True
 
 model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
+model = torch.compile(model)
 print(f"{sum(p.numel() for p in model.parameters()):,} parameters on {device}")
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
 step, t0 = 0, time.time()
 while time.time() - t0 < time_budget:
     x, y = get_batch()
-    logits = model(x)
-    loss = F.cross_entropy(logits.flatten(0, 1), y.flatten())
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+    with torch.autocast(device_type=device, dtype=torch.bfloat16):
+        logits = model(x)
+        loss = F.cross_entropy(logits.flatten(0, 1), y.flatten())
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
     step += 1
     if step % 100 == 0:
         elapsed = time.time() - t0
