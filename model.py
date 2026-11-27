@@ -1,5 +1,4 @@
 """A vanilla GPT-2 style transformer. Adapted from nanoGPT (github.com/karpathy/nanoGPT, MIT)."""
-import math
 import os
 from dataclasses import asdict, dataclass
 
@@ -23,17 +22,13 @@ class CausalSelfAttention(nn.Module):
         self.n_head = cfg.n_head
         self.qkv = nn.Linear(cfg.n_embd, 3 * cfg.n_embd)
         self.proj = nn.Linear(cfg.n_embd, cfg.n_embd)
-        mask = torch.tril(torch.ones(cfg.block_size, cfg.block_size, dtype=torch.bool))
-        self.register_buffer("mask", mask, persistent=False)
 
     def forward(self, x):
         B, T, C = x.shape
         q, k, v = self.qkv(x).split(C, dim=2)
         # (B, T, C) -> (B, n_head, T, head_dim)
         q, k, v = (t.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) for t in (q, k, v))
-        att = (q @ k.transpose(-2, -1)) / math.sqrt(k.size(-1))
-        att = att.masked_fill(~self.mask[:T, :T], float("-inf"))  # no peeking at the future
-        y = F.softmax(att, dim=-1) @ v
+        y = F.scaled_dot_product_attention(q, k, v, dropout_p=0.0, is_causal=True)
         y = y.transpose(1, 2).reshape(B, T, C)
         return self.proj(y)
 
