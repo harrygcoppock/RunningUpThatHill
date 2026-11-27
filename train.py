@@ -36,14 +36,15 @@ os.makedirs(out_dir, exist_ok=True)
 tok = load_tokenizer(out_dir)
 with open("data/train.txt", "rb") as f:
     data = tok.encode(f.read())
+data = torch.from_numpy(data.astype(np.int32)).to(device)
+batch_offsets = torch.arange(block_size + 1, device=device)
 
 
 def get_batch():
     """A batch of random windows: y is x shifted one token to the left."""
-    ix = np.random.randint(0, len(data) - block_size - 1, batch_size)
-    x = np.stack([data[i : i + block_size] for i in ix]).astype(np.int64)
-    y = np.stack([data[i + 1 : i + 1 + block_size] for i in ix]).astype(np.int64)
-    return torch.from_numpy(x).to(device), torch.from_numpy(y).to(device)
+    ix = torch.randint(0, len(data) - block_size - 1, (batch_size, 1), device=device)
+    batch = data[ix + batch_offsets].long()
+    return batch[:, :-1].contiguous(), batch[:, 1:].contiguous()
 
 
 model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
