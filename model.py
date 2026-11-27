@@ -70,14 +70,46 @@ class GPT(nn.Module):
         self.blocks = nn.ModuleList([Block(cfg) for _ in range(cfg.n_layer)])
         self.ln_f = nn.LayerNorm(cfg.n_embd)
         self.head = nn.Linear(cfg.n_embd, cfg.vocab_size, bias=False)
+        # In-document copy-pointer head (CPLM, modded-nanogpt PR #379)
+        ptr_dim = 64
+        self.ptr_q = nn.Linear(cfg.n_embd, ptr_dim, bias=False)
+        self.ptr_k = nn.Linear(cfg.n_embd, ptr_dim, bias=False)
+        self.ptr_gate = nn.Linear(cfg.n_embd, 1)
+        self.ptr_sink = nn.Linear(cfg.n_embd, 1)
+        self.ptr_scale = nn.Parameter(torch.tensor(ptr_dim ** -0.5))
+        strict_tril = torch.tril(torch.ones(cfg.block_size, cfg.block_size, dtype=torch.bool), diagonal=-1)
+        self.register_buffer("strict_tril", strict_tril, persistent=False)
 
     def forward(self, idx):
-        """idx: (B, T) token ids -> logits: (B, T, vocab_size)"""
-        pos = torch.arange(idx.size(1), device=idx.device)
+        """idx: (B, T) token ids -> log-probabilities: (B, T, vocab_size)"""
+        B, T = idx.shape
+        pos = torch.arange(T, device=idx.device)
         x = self.tok_emb(idx) + self.pos_emb(pos)
         for block in self.blocks:
             x = block(x)
-        return self.head(self.ln_f(x))
+        h = self.ln_f(x)
+        logits = self.head(h)
+        if T <= 1:
+            return logits
+
+        pq = self.ptr_q(h).float()
+        pk = self.ptr_k(h[:, :-1]).float()
+        pq = pq * torch.rsqrt(pq.pow(2).mean(dim=-1, keepdim=True) + 1e-6)
+        pk = pk * torch.rsqrt(pk.pow(2).mean(dim=-1, keepdim=True) + 1e-6)
+        scores = torch.bmm(pq, pk.transpose(1, 2)) * self.ptr_scale.float()
+        scores = scores.masked_fill(~self.strict_tril[:T, : T - 1], float("-inf"))
+        sink = self.ptr_sink(h).float()
+        weights = F.softmax(torch.cat([scores, sink], dim=-1), dim=-1)
+        w_copy, w_sink = weights[:, :, :-1], weights[:, :, -1:]
+
+        p_copy = torch.zeros(B, T, logits.size(-1), device=logits.device, dtype=torch.float32)
+        targets = idx[:, 1:].unsqueeze(1).expand(B, T, T - 1)
+        p_copy.scatter_add_(2, targets, w_copy)
+
+        alpha = torch.sigmoid(self.ptr_gate(h).float())
+        p_lm = F.softmax(logits.float(), dim=-1)
+        p = p_lm * (1.0 - alpha * (1.0 - w_sink)) + alpha * p_copy
+        return torch.log(p.clamp_min(1e-7))
 
 
 def save_model(model, out_dir):
