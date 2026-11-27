@@ -1444,5 +1444,203 @@
     1.9973
    ]
   ]
+ },
+ {
+  "job": "golf-pr22-835742f-1127-130013",
+  "pr": 22,
+  "sha": "835742f",
+  "author": "AhmadSaidan",
+  "title": "In-document copy-pointer LM head (CPLM)",
+  "change": "Add an in-document copy-pointer mixture head (CPLM, adapted from `modded-nanogpt` PR #379)",
+  "date": "2026-11-27T13:34:45+00:00",
+  "merged": false,
+  "bpb": 2.0106,
+  "size": 13582344,
+  "params": 3389955,
+  "steps": 4573,
+  "tokens": 74924032,
+  "sample": "Deep Learning is all about the second silence of this ride. See it is all the ill-headquated to success, it was not going that him for some of the types of images, both was all as monitoring effects of please, or any other whole company for any tentish barrells, or as wide disney who was customed even the type of their pleas",
+  "curve": [
+   [
+    6,
+    3.7702
+   ],
+   [
+    12,
+    3.5678
+   ],
+   [
+    18,
+    3.3906
+   ],
+   [
+    24,
+    3.1194
+   ],
+   [
+    30,
+    2.9036
+   ],
+   [
+    37,
+    2.6964
+   ],
+   [
+    43,
+    2.6081
+   ],
+   [
+    49,
+    2.4848
+   ],
+   [
+    55,
+    2.449
+   ],
+   [
+    61,
+    2.3879
+   ],
+   [
+    67,
+    2.3119
+   ],
+   [
+    74,
+    2.2945
+   ],
+   [
+    80,
+    2.2678
+   ],
+   [
+    86,
+    2.303
+   ],
+   [
+    93,
+    2.2359
+   ],
+   [
+    99,
+    2.1601
+   ],
+   [
+    106,
+    2.1597
+   ],
+   [
+    112,
+    2.0623
+   ],
+   [
+    119,
+    2.1173
+   ],
+   [
+    125,
+    2.1423
+   ],
+   [
+    132,
+    2.0802
+   ],
+   [
+    138,
+    2.1324
+   ],
+   [
+    145,
+    2.1133
+   ],
+   [
+    151,
+    2.0786
+   ],
+   [
+    158,
+    2.0841
+   ],
+   [
+    165,
+    2.0994
+   ],
+   [
+    171,
+    2.0633
+   ],
+   [
+    178,
+    2.0185
+   ],
+   [
+    185,
+    2.0808
+   ],
+   [
+    192,
+    2.0453
+   ],
+   [
+    198,
+    1.9899
+   ],
+   [
+    205,
+    1.9935
+   ],
+   [
+    212,
+    1.9712
+   ],
+   [
+    219,
+    1.9918
+   ],
+   [
+    226,
+    1.9938
+   ],
+   [
+    232,
+    2.0193
+   ],
+   [
+    239,
+    2.0266
+   ],
+   [
+    246,
+    2.0493
+   ],
+   [
+    253,
+    2.0483
+   ],
+   [
+    260,
+    2.0483
+   ],
+   [
+    267,
+    1.9572
+   ],
+   [
+    274,
+    1.9667
+   ],
+   [
+    281,
+    1.9885
+   ],
+   [
+    288,
+    1.9719
+   ],
+   [
+    295,
+    2.0172
+   ]
+  ]
  }
 ]
