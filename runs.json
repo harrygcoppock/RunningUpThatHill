@@ -689,7 +689,7 @@
   "title": "Use Muon for hidden-layer weight matrices",
   "change": "use Muon for hidden-layer weight matrices, with AdamW for the remaining parameters.",
   "date": "2026-11-27T12:44:47+00:00",
-  "merged": false,
+  "merged": true,
   "bpb": 1.9992,
   "size": 13445659,
   "params": 3356672,
