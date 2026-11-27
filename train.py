@@ -48,16 +48,44 @@ def get_batch():
 
 model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
 print(f"{sum(p.numel() for p in model.parameters()):,} parameters on {device}")
-optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, capturable=device == "cuda")
 
-step, t0 = 0, time.time()
-while time.time() - t0 < time_budget:
-    x, y = get_batch()
+
+def train_step(x, y):
     logits = model(x)
     loss = F.cross_entropy(logits.flatten(0, 1), y.flatten())
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+    return loss
+
+
+graph = None
+warmup_stream = torch.cuda.Stream() if device == "cuda" else None
+step, t0 = 0, time.time()
+while time.time() - t0 < time_budget:
+    x, y = get_batch()
+    if warmup_stream is not None and step < 3:
+        # Warm up with real batches and count these optimizer updates.
+        warmup_stream.wait_stream(torch.cuda.current_stream())
+        with torch.cuda.stream(warmup_stream):
+            loss = train_step(x, y)
+        torch.cuda.current_stream().wait_stream(warmup_stream)
+    elif device == "cuda":
+        if graph is None:
+            static_x, static_y = x, y
+            optimizer.zero_grad(set_to_none=True)
+            graph = torch.cuda.CUDAGraph()
+            with torch.cuda.graph(graph):
+                loss = train_step(static_x, static_y)
+            if time.time() - t0 >= time_budget:
+                break
+        else:
+            static_x.copy_(x)
+            static_y.copy_(y)
+        graph.replay()
+    else:
+        loss = train_step(x, y)
     step += 1
     if step % 100 == 0:
         elapsed = time.time() - t0
