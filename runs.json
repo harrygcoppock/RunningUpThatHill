@@ -2827,5 +2827,22 @@
     2.0811
    ]
   ]
+ },
+ {
+  "job": "golf-pr6-331757c-1127-153508",
+  "pr": 6,
+  "sha": "331757c",
+  "author": "KOLESNiii",
+  "title": "Multi-token prediction auxiliary loss (DeepSeek-V3 MTP)",
+  "change": "add a DeepSeek-V3 multi-token prediction (MTP) auxiliary loss, weight 0.3, training only",
+  "date": "2026-11-27T17:12:04+00:00",
+  "merged": false,
+  "bpb": null,
+  "size": null,
+  "params": null,
+  "steps": null,
+  "tokens": null,
+  "sample": null,
+  "curve": []
  }
 ]
