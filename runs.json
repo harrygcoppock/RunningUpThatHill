@@ -1217,5 +1217,22 @@
     1.981
    ]
   ]
+ },
+ {
+  "job": "golf-pr12-f5e109b-1127-122142",
+  "pr": 12,
+  "sha": "f5e109b",
+  "author": "wei3000",
+  "title": "RoPE instead of learned position embeddings",
+  "change": "RoPE instead of learned position embeddings",
+  "date": "2026-11-27T13:23:42+00:00",
+  "merged": false,
+  "bpb": null,
+  "size": null,
+  "params": null,
+  "steps": null,
+  "tokens": null,
+  "sample": null,
+  "curve": []
  }
 ]
