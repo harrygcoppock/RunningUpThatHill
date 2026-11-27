@@ -15,6 +15,7 @@ class GPTConfig:
     n_layer: int = 4
     n_head: int = 4
     n_embd: int = 256
+    mtp: bool = False  # add the training-only multi-token prediction module
 
 
 class CausalSelfAttention(nn.Module):
@@ -62,6 +63,22 @@ class Block(nn.Module):
         return x
 
 
+class MTP(nn.Module):
+    """DeepSeek-V3 multi-token prediction module (depth 1). It combines the main model's final hidden
+    state at position i with the embedding of token i+1, runs one more transformer block, and predicts
+    token i+2 through the shared output head. It only adds training signal, and is not saved."""
+
+    def __init__(self, cfg):
+        super().__init__()
+        self.norm_h = nn.LayerNorm(cfg.n_embd)
+        self.norm_e = nn.LayerNorm(cfg.n_embd)
+        self.proj = nn.Linear(2 * cfg.n_embd, cfg.n_embd, bias=False)
+        self.block = Block(cfg)
+
+    def forward(self, h, next_emb):
+        return self.block(self.proj(torch.cat([self.norm_h(h), self.norm_e(next_emb)], dim=-1)))
+
+
 class GPT(nn.Module):
     def __init__(self, cfg):
         super().__init__()
@@ -72,18 +89,28 @@ class GPT(nn.Module):
         self.blocks = nn.ModuleList([Block(cfg) for _ in range(cfg.n_layer)])
         self.ln_f = nn.LayerNorm(cfg.n_embd)
         self.head = nn.Linear(cfg.n_embd, cfg.vocab_size, bias=False)
+        self.mtp = MTP(cfg) if cfg.mtp else None
 
-    def forward(self, idx):
-        """idx: (B, T) token ids -> logits: (B, T, vocab_size)"""
+    def forward(self, idx, return_hidden=False):
+        """idx: (B, T) token ids -> logits: (B, T, vocab_size), plus the final hidden states if asked"""
         pos = torch.arange(idx.size(1), device=idx.device)
         x = self.tok_emb(idx) + self.pos_emb(pos)
         for block in self.blocks:
             x = block(x)
-        return self.head(self.ln_f(x))
+        logits = self.head(self.ln_f(x))
+        return (logits, x) if return_hidden else logits
+
+    def mtp_logits(self, h, idx):
+        """Logits for token i+2 at each position i < T-1, from hidden states h of model(idx)."""
+        h2 = self.mtp(h[:, :-1], self.tok_emb(idx[:, 1:]))
+        return self.head(self.ln_f(h2))
 
 
 def save_model(model, out_dir):
-    torch.save({"config": asdict(model.cfg), "state_dict": model.state_dict()}, os.path.join(out_dir, "model.pt"))
+    # The MTP module is only for training: drop it, so it costs nothing at eval time or towards the size limit.
+    config = {**asdict(model.cfg), "mtp": False}
+    state = {k: v for k, v in model.state_dict().items() if not k.startswith("mtp.")}
+    torch.save({"config": config, "state_dict": state}, os.path.join(out_dir, "model.pt"))
 
 
 def load_model(out_dir):

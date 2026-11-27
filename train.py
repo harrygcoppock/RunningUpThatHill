@@ -21,6 +21,7 @@ n_embd = 256
 block_size = 256
 batch_size = 64
 learning_rate = 6e-4
+mtp_weight = 0.3  # weight of the multi-token prediction loss (DeepSeek-V3 uses 0.3, then 0.1)
 seed = 1337
 out_dir = "out"
 for arg in sys.argv[1:]:
@@ -46,17 +47,18 @@ def get_batch():
     return torch.from_numpy(x).to(device), torch.from_numpy(y).to(device)
 
 
-model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
+model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd, mtp=True)).to(device)
 print(f"{sum(p.numel() for p in model.parameters()):,} parameters on {device}")
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
 step, t0 = 0, time.time()
 while time.time() - t0 < time_budget:
     x, y = get_batch()
-    logits = model(x)
-    loss = F.cross_entropy(logits.flatten(0, 1), y.flatten())
+    logits, h = model(x, return_hidden=True)
+    loss = F.cross_entropy(logits.flatten(0, 1), y.flatten())  # next token: the one we log and are scored on
+    mtp_loss = F.cross_entropy(model.mtp_logits(h, x).flatten(0, 1), y[:, 1:].flatten())  # the token after
     optimizer.zero_grad()
-    loss.backward()
+    (loss + mtp_weight * mtp_loss).backward()
     optimizer.step()
     step += 1
     if step % 100 == 0:
