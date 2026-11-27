@@ -997,5 +997,71 @@
   "tokens": null,
   "sample": null,
   "curve": []
+ },
+ {
+  "job": "golf-pr7-3602317-1127-122758",
+  "pr": 7,
+  "sha": "3602317",
+  "author": "KOLESNiii",
+  "title": "int8 blockwise weights + 3x bigger model (6x384) in the freed size budget",
+  "change": "int8 blockwise weight storage, spent on a 3x bigger model (4x256 -> 6x384, 3.4M -> 10.9M params, 11.7 MB)",
+  "date": "2026-11-27T13:08:57+00:00",
+  "merged": false,
+  "bpb": 2.2614,
+  "size": 11748325,
+  "params": 10943232,
+  "steps": 1251,
+  "tokens": 20496384,
+  "sample": "Deep Learning is all about the People Light and other ridefriends. So it constitutions are products to avoid technology about helpital sources in the forms in the subject's a common as intented in Wilmiper of the people\nthat the country sper style the most are thoughtful forming, which we we\u2019re eventh to picture. I don\u2019t",
+  "curve": [
+   [
+    22,
+    3.8311
+   ],
+   [
+    45,
+    3.56
+   ],
+   [
+    67,
+    3.2156
+   ],
+   [
+    91,
+    3.0112
+   ],
+   [
+    114,
+    2.7642
+   ],
+   [
+    139,
+    2.5611
+   ],
+   [
+    163,
+    2.5039
+   ],
+   [
+    187,
+    2.346
+   ],
+   [
+    212,
+    2.3555
+   ],
+   [
+    237,
+    2.2806
+   ],
+   [
+    262,
+    2.2056
+   ],
+   [
+    287,
+    2.2212
+   ]
+  ]
  }
 ]
