@@ -980,5 +980,22 @@
     2.1304
    ]
   ]
+ },
+ {
+  "job": "golf-pr2-c2b9fc7-1127-124243",
+  "pr": 2,
+  "sha": "c2b9fc7",
+  "author": "scorbett123",
+  "title": "Use bf16, and a bunch of other pytorch magic",
+  "change": "Add some pytorch magic incantations and use bf16",
+  "date": "2026-11-27T13:06:22+00:00",
+  "merged": false,
+  "bpb": null,
+  "size": null,
+  "params": 3356672,
+  "steps": null,
+  "tokens": null,
+  "sample": null,
+  "curve": []
  }
 ]
