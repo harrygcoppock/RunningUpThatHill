@@ -2217,5 +2217,211 @@
     1.9292
    ]
   ]
+ },
+ {
+  "job": "golf-pr29-09ef47f-1127-153212",
+  "pr": 29,
+  "sha": "09ef47f",
+  "author": "AhmadSaidan",
+  "title": "Upgrade Muon to NorMuon (per-row adaptive normalization)",
+  "change": "Upgrade Muon to NorMuon by adding per-row adaptive second-moment normalization (with norm preservation) after Newton-Sch",
+  "date": "2026-11-27T16:01:05+00:00",
+  "merged": false,
+  "bpb": 1.9546,
+  "size": 13445632,
+  "params": 3356672,
+  "steps": 4745,
+  "tokens": 77742080,
+  "sample": "Deep Learning is all about the People sign of learning in front.\nAny police can reserve that the choristous foreign great photography as an issue that offers its second experience, in the participation please, or use our photos of patients reserve their support, or as one of his workshop can\u2019t help.\nThe Chortographic proje",
+  "curve": [
+   [
+    7,
+    3.462
+   ],
+   [
+    13,
+    2.6844
+   ],
+   [
+    18,
+    2.4272
+   ],
+   [
+    24,
+    2.3901
+   ],
+   [
+    30,
+    2.2606
+   ],
+   [
+    36,
+    2.1881
+   ],
+   [
+    42,
+    2.1929
+   ],
+   [
+    48,
+    2.1046
+   ],
+   [
+    54,
+    2.1573
+   ],
+   [
+    60,
+    2.1088
+   ],
+   [
+    67,
+    2.0479
+   ],
+   [
+    73,
+    2.1179
+   ],
+   [
+    79,
+    2.0843
+   ],
+   [
+    85,
+    2.1486
+   ],
+   [
+    91,
+    2.0899
+   ],
+   [
+    97,
+    2.0358
+   ],
+   [
+    103,
+    2.0547
+   ],
+   [
+    110,
+    1.9518
+   ],
+   [
+    116,
+    2.0303
+   ],
+   [
+    122,
+    2.0534
+   ],
+   [
+    128,
+    1.9742
+   ],
+   [
+    135,
+    2.0489
+   ],
+   [
+    141,
+    2.026
+   ],
+   [
+    147,
+    1.9853
+   ],
+   [
+    154,
+    1.9905
+   ],
+   [
+    161,
+    1.9967
+   ],
+   [
+    167,
+    1.974
+   ],
+   [
+    174,
+    1.9476
+   ],
+   [
+    180,
+    1.9834
+   ],
+   [
+    187,
+    1.9599
+   ],
+   [
+    193,
+    1.9247
+   ],
+   [
+    200,
+    1.9171
+   ],
+   [
+    206,
+    1.894
+   ],
+   [
+    213,
+    1.9168
+   ],
+   [
+    219,
+    1.9085
+   ],
+   [
+    226,
+    1.9534
+   ],
+   [
+    232,
+    1.9423
+   ],
+   [
+    239,
+    2.0027
+   ],
+   [
+    245,
+    1.9794
+   ],
+   [
+    251,
+    1.9976
+   ],
+   [
+    258,
+    1.8908
+   ],
+   [
+    264,
+    1.9023
+   ],
+   [
+    271,
+    1.9348
+   ],
+   [
+    277,
+    1.9124
+   ],
+   [
+    284,
+    1.9624
+   ],
+   [
+    291,
+    1.9354
+   ],
+   [
+    297,
+    1.9176
+   ]
+  ]
  }
 ]
