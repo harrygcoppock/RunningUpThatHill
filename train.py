@@ -11,7 +11,7 @@ import torch
 import torch.nn.functional as F
 
 from model import GPT, GPTConfig, save_model
-from tokenizer import load_tokenizer
+from tokenizer import BPETokenizer
 
 # ---- config (override any of these from the command line with key=value) ----
 time_budget = 300.0  # seconds of training
@@ -21,6 +21,7 @@ n_embd = 256
 block_size = 256
 batch_size = 64
 learning_rate = 6e-4
+vocab_size = 1024
 seed = 1337
 out_dir = "out"
 for arg in sys.argv[1:]:
@@ -33,9 +34,12 @@ torch.manual_seed(seed)
 np.random.seed(seed)
 os.makedirs(out_dir, exist_ok=True)
 
-tok = load_tokenizer(out_dir)
 with open("data/train.txt", "rb") as f:
-    data = tok.encode(f.read())
+    raw = f.read()
+tok = BPETokenizer.train(raw, vocab_size=vocab_size)
+tok.save(out_dir)
+data = tok.encode(raw)
+del raw
 
 
 def get_batch():
