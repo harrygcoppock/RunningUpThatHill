@@ -1063,5 +1063,159 @@
     2.2212
    ]
   ]
+ },
+ {
+  "job": "golf-pr13-bed3596-1127-123142",
+  "pr": 13,
+  "sha": "bed3596",
+  "author": "dorianturner",
+  "title": "Add lossless frequent byte-pair tokenization",
+  "change": "replace byte-only tokenization with lossless byte tokens plus 256 frequent byte pairs.",
+  "date": "2026-11-27T13:09:04+00:00",
+  "merged": false,
+  "bpb": 1.9894,
+  "size": 13971991,
+  "params": 3487744,
+  "steps": 3428,
+  "tokens": 56164352,
+  "sample": "Deep Learning is all about the exact of faced poker than a interesting and have no startful.\nIf you don\u2019t see the most important-defined following in a good time to spend and standard. You burn on me. You due to the rise to give the boxe with the integration. It will be able to make it at the top-market, you are truly trea",
+  "curve": [
+   [
+    9,
+    3.183
+   ],
+   [
+    17,
+    3.0927
+   ],
+   [
+    26,
+    2.9803
+   ],
+   [
+    34,
+    2.8908
+   ],
+   [
+    42,
+    2.6698
+   ],
+   [
+    51,
+    2.5376
+   ],
+   [
+    59,
+    2.4421
+   ],
+   [
+    68,
+    2.4153
+   ],
+   [
+    77,
+    2.3183
+   ],
+   [
+    85,
+    2.3013
+   ],
+   [
+    94,
+    2.2756
+   ],
+   [
+    102,
+    2.2928
+   ],
+   [
+    111,
+    2.1745
+   ],
+   [
+    120,
+    2.1913
+   ],
+   [
+    128,
+    2.167
+   ],
+   [
+    137,
+    2.1803
+   ],
+   [
+    146,
+    2.1756
+   ],
+   [
+    155,
+    2.1633
+   ],
+   [
+    164,
+    2.1447
+   ],
+   [
+    172,
+    2.0457
+   ],
+   [
+    181,
+    2.0701
+   ],
+   [
+    190,
+    2.086
+   ],
+   [
+    199,
+    2.0232
+   ],
+   [
+    208,
+    2.066
+   ],
+   [
+    217,
+    2.0792
+   ],
+   [
+    226,
+    2.0113
+   ],
+   [
+    235,
+    2.0074
+   ],
+   [
+    244,
+    1.9968
+   ],
+   [
+    253,
+    2.0456
+   ],
+   [
+    262,
+    1.9976
+   ],
+   [
+    271,
+    2.0162
+   ],
+   [
+    280,
+    1.9966
+   ],
+   [
+    289,
+    1.9828
+   ],
+   [
+    298,
+    1.981
+   ]
+  ]
  }
 ]
