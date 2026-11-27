@@ -41,8 +41,8 @@ class CausalSelfAttention(nn.Module):
 class MLP(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        self.fc = nn.Linear(cfg.n_embd, 4 * cfg.n_embd)
-        self.proj = nn.Linear(4 * cfg.n_embd, cfg.n_embd)
+        self.fc = nn.Linear(cfg.n_embd, 2 * cfg.n_embd)
+        self.proj = nn.Linear(2 * cfg.n_embd, cfg.n_embd)
 
     def forward(self, x):
         return self.proj(F.gelu(self.fc(x)))
