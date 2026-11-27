@@ -15,6 +15,10 @@ class GPTConfig:
     n_layer: int = 4
     n_head: int = 4
     n_embd: int = 256
+    n_expert: int = 8  # routed experts per layer
+    expert_top_k: int = 2  # routed experts each token uses
+    expert_hidden: int = 128  # hidden width of each routed expert
+    shared_hidden: int = 256  # hidden width of the always-on shared expert
 
 
 class CausalSelfAttention(nn.Module):
@@ -38,14 +42,47 @@ class CausalSelfAttention(nn.Module):
         return self.proj(y)
 
 
-class MLP(nn.Module):
-    def __init__(self, cfg):
+class FFN(nn.Module):
+    def __init__(self, d, h):
         super().__init__()
-        self.fc = nn.Linear(cfg.n_embd, 4 * cfg.n_embd)
-        self.proj = nn.Linear(4 * cfg.n_embd, cfg.n_embd)
+        self.fc = nn.Linear(d, h)
+        self.proj = nn.Linear(h, d)
 
     def forward(self, x):
         return self.proj(F.gelu(self.fc(x)))
+
+
+class MoE(nn.Module):
+    """DeepSeek-V3 style mixture of experts: one shared expert every token uses, plus top-k of n_expert
+    small routed experts chosen by sigmoid affinity. Load balancing has no auxiliary loss: a per-expert
+    bias is added to the scores only for choosing experts. After each training forward it is nudged
+    up for under-used experts and down for over-used ones."""
+
+    def __init__(self, cfg, bias_update_speed=1e-3):
+        super().__init__()
+        self.top_k, self.speed = cfg.expert_top_k, bias_update_speed
+        self.shared = FFN(cfg.n_embd, cfg.shared_hidden)
+        self.experts = nn.ModuleList([FFN(cfg.n_embd, cfg.expert_hidden) for _ in range(cfg.n_expert)])
+        self.router = nn.Linear(cfg.n_embd, cfg.n_expert, bias=False)
+        self.register_buffer("route_bias", torch.zeros(cfg.n_expert))
+
+    def forward(self, x):
+        shape = x.shape
+        x = x.reshape(-1, shape[-1])  # (N, C): routing is per token, so batch rows never mix
+        scores = torch.sigmoid(self.router(x).float())  # (N, n_expert) affinities
+        idx = (scores + self.route_bias).topk(self.top_k, dim=-1).indices  # bias picks, it does not weight
+        gate = scores.gather(1, idx)
+        gate = (gate / gate.sum(-1, keepdim=True)).to(x.dtype)  # normalised over the chosen experts
+        out = self.shared(x)
+        for e, expert in enumerate(self.experts):
+            tok, slot = (idx == e).nonzero(as_tuple=True)
+            if tok.numel():
+                out = out.index_add(0, tok, expert(x[tok]) * gate[tok, slot, None])
+        if self.training:
+            with torch.no_grad():
+                load = torch.bincount(idx.flatten(), minlength=len(self.experts)).float()
+                self.route_bias += self.speed * torch.sign(load.mean() - load)
+        return out.view(shape)
 
 
 class Block(nn.Module):
@@ -54,7 +91,7 @@ class Block(nn.Module):
         self.ln1 = nn.LayerNorm(cfg.n_embd)
         self.attn = CausalSelfAttention(cfg)
         self.ln2 = nn.LayerNorm(cfg.n_embd)
-        self.mlp = MLP(cfg)
+        self.mlp = MoE(cfg)
 
     def forward(self, x):
         x = x + self.attn(self.ln1(x))
