@@ -82,12 +82,32 @@ class GPT(nn.Module):
         return self.head(self.ln_f(x))
 
 
+QUANT_BLOCK = 64  # weights per quantisation block, each with its own absmax scale
+
+
+def quantize_int8(w):
+    """Blockwise absmax int8 (as in QLoRA): cut w into blocks of QUANT_BLOCK values and map each block's
+    [-absmax, absmax] onto [-127, 127], so one outlier only costs precision within its own block."""
+    flat = w.detach().float().flatten()
+    flat = F.pad(flat, (0, -len(flat) % QUANT_BLOCK)).view(-1, QUANT_BLOCK)
+    scale = flat.abs().amax(dim=1, keepdim=True).clamp(min=1e-12) / 127  # 1 / quantisation constant
+    return {"q": torch.round(flat / scale).to(torch.int8), "scale": scale, "shape": tuple(w.shape)}
+
+
+def dequantize_int8(d):
+    n = math.prod(d["shape"])
+    return (d["q"].float() * d["scale"]).flatten()[:n].view(d["shape"])
+
+
 def save_model(model, out_dir):
-    torch.save({"config": asdict(model.cfg), "state_dict": model.state_dict()}, os.path.join(out_dir, "model.pt"))
+    # Matrices (embeddings and linear weights, almost all of the parameters) are stored as int8, about 4x
+    # smaller than fp32. Small vectors (biases, LayerNorm) stay fp32.
+    state = {k: quantize_int8(v) if v.dim() >= 2 else v for k, v in model.state_dict().items()}
+    torch.save({"config": asdict(model.cfg), "state_dict": state}, os.path.join(out_dir, "model.pt"))
 
 
 def load_model(out_dir):
     ckpt = torch.load(os.path.join(out_dir, "model.pt"), map_location="cpu")
     model = GPT(GPTConfig(**ckpt["config"]))
-    model.load_state_dict(ckpt["state_dict"])
+    model.load_state_dict({k: dequantize_int8(v) if isinstance(v, dict) else v for k, v in ckpt["state_dict"].items()})
     return model

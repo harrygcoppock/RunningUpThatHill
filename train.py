@@ -15,9 +15,9 @@ from tokenizer import load_tokenizer
 
 # ---- config (override any of these from the command line with key=value) ----
 time_budget = 300.0  # seconds of training
-n_layer = 4
-n_head = 4
-n_embd = 256
+n_layer = 6  # 6 x 384 (10.9M params) fits in 16 MB only because model.py saves the weights as int8
+n_head = 6
+n_embd = 384
 block_size = 256
 batch_size = 64
 learning_rate = 6e-4
