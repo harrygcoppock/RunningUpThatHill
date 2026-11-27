@@ -46,7 +46,6 @@ def get_batch():
     return torch.from_numpy(x).to(device), torch.from_numpy(y).to(device)
 
 # Don't know if these actually help, but they sometimes do
-torch.backends.cuda.matmul.fp32_precision = "tf32"
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
