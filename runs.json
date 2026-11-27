@@ -830,5 +830,155 @@
     1.9083
    ]
   ]
+ },
+ {
+  "job": "golf-pr9-b134632-1127-123255",
+  "pr": 9,
+  "sha": "b134632",
+  "author": "wei3000",
+  "title": "LR warmup + cosine decay to 0",
+  "change": "LR warmup + cosine decay to 0",
+  "date": "2026-11-27T12:57:50+00:00",
+  "merged": false,
+  "bpb": 2.2468,
+  "size": 13445659,
+  "params": 3356672,
+  "steps": 3324,
+  "tokens": 54460416,
+  "sample": "Deep Learning is all about the second film at least periminated.\nA robject stailron for the pass combination of the great photographic sources in this order Ohaman Afabora. Richaa, he sicked extend growtheting or team. The prosticulation performed the most sample of several characters an end-abaster and to potten their prese",
+  "curve": [
+   [
+    9,
+    4.0041
+   ],
+   [
+    17,
+    3.6822
+   ],
+   [
+    25,
+    3.6054
+   ],
+   [
+    34,
+    3.4362
+   ],
+   [
+    42,
+    3.1995
+   ],
+   [
+    50,
+    2.9989
+   ],
+   [
+    59,
+    2.9093
+   ],
+   [
+    67,
+    2.725
+   ],
+   [
+    76,
+    2.6879
+   ],
+   [
+    85,
+    2.6055
+   ],
+   [
+    93,
+    2.5054
+   ],
+   [
+    102,
+    2.4667
+   ],
+   [
+    111,
+    2.4396
+   ],
+   [
+    120,
+    2.4915
+   ],
+   [
+    128,
+    2.3913
+   ],
+   [
+    137,
+    2.3154
+   ],
+   [
+    147,
+    2.3261
+   ],
+   [
+    156,
+    2.208
+   ],
+   [
+    165,
+    2.2812
+   ],
+   [
+    174,
+    2.2968
+   ],
+   [
+    183,
+    2.2235
+   ],
+   [
+    193,
+    2.2819
+   ],
+   [
+    202,
+    2.2787
+   ],
+   [
+    211,
+    2.2437
+   ],
+   [
+    221,
+    2.2024
+   ],
+   [
+    230,
+    2.234
+   ],
+   [
+    240,
+    2.1941
+   ],
+   [
+    250,
+    2.1831
+   ],
+   [
+    259,
+    2.2307
+   ],
+   [
+    269,
+    2.1929
+   ],
+   [
+    278,
+    2.164
+   ],
+   [
+    288,
+    2.1581
+   ],
+   [
+    298,
+    2.1304
+   ]
+  ]
  }
 ]
