@@ -5,7 +5,8 @@
 #   network-isolated SageMaker job. eval.py and scoring/ always come from main.
 # - Only a `score` label added by vars.SCORING_APPROVER starts a run; the label is removed afterwards,
 #   so new commits need a fresh approval.
-# - The `scoring` environment (which holds the AWS role) is restricted to protected branches (main).
+# - The `scoring` environment holds the AWS role. It has no branch restriction: for pull_request_target,
+#   GitHub checks environment branch rules against the fork's head branch, so "protected only" blocks every PR.
 # - PR text (title, body, author) reaches scripts only through env variables, never inline ${{ }}.
 name: score
 on:

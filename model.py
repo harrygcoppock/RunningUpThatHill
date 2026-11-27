@@ -1,5 +1,4 @@
 """A vanilla GPT-2 style transformer. Adapted from nanoGPT (github.com/karpathy/nanoGPT, MIT)."""
-import math
 import os
 from dataclasses import asdict, dataclass
 
@@ -29,7 +28,7 @@ class CausalSelfAttention(nn.Module):
         q, k, v = self.qkv(x).split(C, dim=2)
         # (B, T, C) -> (B, n_head, T, head_dim)
         q, k, v = (t.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) for t in (q, k, v))
-        y = F.scaled_dot_product_attention(q, k, v, is_causal=False).transpose(1, 2).reshape(B, T, C)
+        y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
         return self.proj(y)
 
 

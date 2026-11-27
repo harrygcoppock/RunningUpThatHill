@@ -16,6 +16,10 @@ python train.py          # 5 min of training -> out/
 python eval.py           # -> val bpb
 ```
 
+Scoring runs on **PyTorch 2.8.0** (Python 3.12, CUDA 12.9), the AWS
+`pytorch-training:2.8.0-gpu-py312-cu129` image. For local results that match, use the same version:
+`pip install torch==2.8.0`.
+
 Override settings from the command line, e.g. `python train.py n_layer=6 n_embd=384 time_budget=60`.
 
 The baseline (4 layers × 256, 3.4M parameters, 13.4 MB) scores **2.121 bpb** on the L4.
@@ -38,7 +42,7 @@ The baseline (4 layers × 256, 3.4M parameters, 13.4 MB) scores **2.121 bpb** on
 4. Any tokenizer is allowed, as long as it is lossless. Its files go in `out/` and count towards the size limit.
 5. **Size limit: 16 MB** (16,000,000 bytes) for `model.py` + `tokenizer.py` + everything in `out/`.
 6. A new record must beat the current one by **at least 0.02 bpb** (about 3× the run-to-run noise). Closer results are rerun with a second seed.
-7. Only packages already in the scoring image (PyTorch 2.8) are available, and there is no internet access.
+7. Only packages already in the scoring image (PyTorch 2.8.0) are available, and there is no internet access.
 8. Keep `train.py`'s `step … | loss … | …s` log line, so your training curve can be plotted.
 
 ## How to submit
