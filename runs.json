@@ -2641,5 +2641,191 @@
     2.0104
    ]
   ]
+ },
+ {
+  "job": "golf-pr15-6c3fa84-1127-153335",
+  "pr": 15,
+  "sha": "6c3fa84",
+  "author": "dorianturner",
+  "title": "Halve dense MLP expansion from 4x to 2x",
+  "change": "reduce dense MLP expansion from 4x to 2x.",
+  "date": "2026-11-27T16:27:04+00:00",
+  "merged": false,
+  "bpb": 2.1535,
+  "size": 9243163,
+  "params": 2306048,
+  "steps": 4204,
+  "tokens": 68878336,
+  "sample": "Deep Learning is all about the second silk about which is free...... I love this when I know that would our foreign great photography results will be a door. I stay of her. Richaals are considered in my learning number to him! I could be perfectly added a partup of right for his works. HOOka\u2019s avaian with stress. In they a",
+  "curve": [
+   [
+    7,
+    3.8914
+   ],
+   [
+    14,
+    3.6692
+   ],
+   [
+    21,
+    3.5948
+   ],
+   [
+    28,
+    3.4355
+   ],
+   [
+    35,
+    3.1935
+   ],
+   [
+    42,
+    2.9862
+   ],
+   [
+    49,
+    2.8968
+   ],
+   [
+    56,
+    2.7385
+   ],
+   [
+    63,
+    2.7006
+   ],
+   [
+    70,
+    2.6093
+   ],
+   [
+    77,
+    2.5073
+   ],
+   [
+    84,
+    2.4907
+   ],
+   [
+    91,
+    2.4496
+   ],
+   [
+    98,
+    2.496
+   ],
+   [
+    105,
+    2.393
+   ],
+   [
+    112,
+    2.3239
+   ],
+   [
+    119,
+    2.3398
+   ],
+   [
+    126,
+    2.2106
+   ],
+   [
+    133,
+    2.2884
+   ],
+   [
+    140,
+    2.3007
+   ],
+   [
+    147,
+    2.2265
+   ],
+   [
+    154,
+    2.2725
+   ],
+   [
+    161,
+    2.2681
+   ],
+   [
+    168,
+    2.2443
+   ],
+   [
+    175,
+    2.203
+   ],
+   [
+    182,
+    2.2287
+   ],
+   [
+    189,
+    2.1951
+   ],
+   [
+    196,
+    2.1737
+   ],
+   [
+    203,
+    2.2105
+   ],
+   [
+    210,
+    2.1783
+   ],
+   [
+    218,
+    2.1369
+   ],
+   [
+    225,
+    2.1234
+   ],
+   [
+    232,
+    2.0853
+   ],
+   [
+    240,
+    2.1071
+   ],
+   [
+    247,
+    2.1003
+   ],
+   [
+    255,
+    2.1464
+   ],
+   [
+    262,
+    2.1391
+   ],
+   [
+    270,
+    2.1831
+   ],
+   [
+    277,
+    2.1453
+   ],
+   [
+    285,
+    2.1767
+   ],
+   [
+    292,
+    2.075
+   ],
+   [
+    300,
+    2.0811
+   ]
+  ]
  }
 ]
