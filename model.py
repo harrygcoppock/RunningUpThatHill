@@ -17,6 +17,21 @@ class GPTConfig:
     n_embd: int = 256
 
 
+def rope_cache(block_size, head_dim, base=10000.0):
+    """cos/sin tables for rotary position embeddings (RoPE, Su et al. 2021): (block_size, head_dim // 2)."""
+    inv_freq = 1.0 / (base ** (torch.arange(0, head_dim, 2).float() / head_dim))
+    angles = torch.outer(torch.arange(block_size).float(), inv_freq)
+    return angles.cos(), angles.sin()
+
+
+def apply_rope(x, cos, sin):
+    """Rotate each (even, odd) pair of channels in x (B, n_head, T, head_dim) by a position-dependent angle."""
+    T = x.size(-2)
+    cos, sin = cos[:T].to(x.dtype), sin[:T].to(x.dtype)
+    x1, x2 = x[..., 0::2], x[..., 1::2]
+    return torch.stack((x1 * cos - x2 * sin, x1 * sin + x2 * cos), dim=-1).flatten(-2)
+
+
 class CausalSelfAttention(nn.Module):
     def __init__(self, cfg):
         super().__init__()
@@ -25,12 +40,16 @@ class CausalSelfAttention(nn.Module):
         self.proj = nn.Linear(cfg.n_embd, cfg.n_embd)
         mask = torch.tril(torch.ones(cfg.block_size, cfg.block_size, dtype=torch.bool))
         self.register_buffer("mask", mask, persistent=False)
+        cos, sin = rope_cache(cfg.block_size, cfg.n_embd // cfg.n_head)
+        self.register_buffer("rope_cos", cos, persistent=False)
+        self.register_buffer("rope_sin", sin, persistent=False)
 
     def forward(self, x):
         B, T, C = x.shape
         q, k, v = self.qkv(x).split(C, dim=2)
         # (B, T, C) -> (B, n_head, T, head_dim)
         q, k, v = (t.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) for t in (q, k, v))
+        q, k = apply_rope(q, self.rope_cos, self.rope_sin), apply_rope(k, self.rope_cos, self.rope_sin)
         att = (q @ k.transpose(-2, -1)) / math.sqrt(k.size(-1))
         att = att.masked_fill(~self.mask[:T, :T], float("-inf"))  # no peeking at the future
         y = F.softmax(att, dim=-1) @ v
@@ -68,15 +87,13 @@ class GPT(nn.Module):
         self.cfg = cfg
         self.block_size = cfg.block_size
         self.tok_emb = nn.Embedding(cfg.vocab_size, cfg.n_embd)
-        self.pos_emb = nn.Embedding(cfg.block_size, cfg.n_embd)
         self.blocks = nn.ModuleList([Block(cfg) for _ in range(cfg.n_layer)])
         self.ln_f = nn.LayerNorm(cfg.n_embd)
         self.head = nn.Linear(cfg.n_embd, cfg.vocab_size, bias=False)
 
     def forward(self, idx):
         """idx: (B, T) token ids -> logits: (B, T, vocab_size)"""
-        pos = torch.arange(idx.size(1), device=idx.device)
-        x = self.tok_emb(idx) + self.pos_emb(pos)
+        x = self.tok_emb(idx)  # positions are encoded by RoPE inside attention
         for block in self.blocks:
             x = block(x)
         return self.head(self.ln_f(x))
