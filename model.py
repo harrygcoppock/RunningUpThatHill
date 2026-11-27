@@ -1,4 +1,5 @@
 """A vanilla GPT-2 style transformer. Adapted from nanoGPT (github.com/karpathy/nanoGPT, MIT)."""
+import math
 import os
 from dataclasses import asdict, dataclass
 
@@ -70,6 +71,17 @@ class GPT(nn.Module):
         self.blocks = nn.ModuleList([Block(cfg) for _ in range(cfg.n_layer)])
         self.ln_f = nn.LayerNorm(cfg.n_embd)
         self.head = nn.Linear(cfg.n_embd, cfg.vocab_size, bias=False)
+        # GPT-2 initialisation (Radford et al. 2019, as in nanoGPT) instead of PyTorch's defaults, which start
+        # the embeddings at N(0, 1), ~50x larger than everything they are added to. All weights get N(0, 0.02),
+        # biases 0, and the two projections that write into the residual stream get 0.02 / sqrt(2 * n_layer),
+        # so the residual stream's variance doesn't grow with depth.
+        for name, p in self.named_parameters():
+            if p.dim() == 1:
+                if not name.endswith(("ln1.weight", "ln2.weight", "ln_f.weight")):
+                    nn.init.zeros_(p)
+            else:
+                std = 0.02 / math.sqrt(2 * cfg.n_layer) if name.endswith("proj.weight") else 0.02
+                nn.init.normal_(p, mean=0.0, std=std)
 
     def forward(self, idx):
         """idx: (B, T) token ids -> logits: (B, T, vocab_size)"""
