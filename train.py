@@ -21,6 +21,7 @@ n_embd = 256
 block_size = 256
 batch_size = 64
 learning_rate = 6e-4
+ema_decay = 0.998  # the saved weights average roughly the last 1 / (1 - ema_decay) = 500 steps
 seed = 1337
 out_dir = "out"
 for arg in sys.argv[1:]:
@@ -49,6 +50,8 @@ def get_batch():
 model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
 print(f"{sum(p.numel() for p in model.parameters()):,} parameters on {device}")
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+params = list(model.parameters())
+ema = [p.detach().clone() for p in params]  # exponential moving average of the weights: this is what we save
 
 step, t0 = 0, time.time()
 while time.time() - t0 < time_budget:
@@ -58,10 +61,14 @@ while time.time() - t0 < time_budget:
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+    with torch.no_grad():  # warm-up: a plain running mean at first, so early weights don't linger
+        torch._foreach_lerp_(ema, params, 1 - min(ema_decay, (1 + step) / (10 + step)))
     step += 1
     if step % 100 == 0:
         elapsed = time.time() - t0
         print(f"step {step} | loss {loss.item():.4f} | {elapsed:.0f}s | {step * batch_size * block_size / elapsed:,.0f} tok/s")
 
 print(f"done: {step} steps, {step * batch_size * block_size:,} tokens in {time.time() - t0:.0f}s")
+with torch.no_grad():
+    torch._foreach_copy_(params, ema)
 save_model(model, out_dir)
