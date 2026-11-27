@@ -46,9 +46,10 @@ def get_batch():
     return torch.from_numpy(x).to(device), torch.from_numpy(y).to(device)
 
 
-model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
-print(f"{sum(p.numel() for p in model.parameters()):,} parameters on {device}")
-optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+raw_model = GPT(GPTConfig(tok.vocab_size, block_size, n_layer, n_head, n_embd)).to(device)
+print(f"{sum(p.numel() for p in raw_model.parameters()):,} parameters on {device}")
+model = torch.compile(raw_model) if device == "cuda" else raw_model
+optimizer = torch.optim.AdamW(raw_model.parameters(), lr=learning_rate)
 
 step, t0 = 0, time.time()
 while time.time() - t0 < time_budget:
@@ -64,4 +65,4 @@ while time.time() - t0 < time_budget:
         print(f"step {step} | loss {loss.item():.4f} | {elapsed:.0f}s | {step * batch_size * block_size / elapsed:,.0f} tok/s")
 
 print(f"done: {step} steps, {step * batch_size * block_size:,} tokens in {time.time() - t0:.0f}s")
-save_model(model, out_dir)
+save_model(raw_model, out_dir)
