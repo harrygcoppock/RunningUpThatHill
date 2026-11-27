@@ -1659,5 +1659,151 @@
   "tokens": null,
   "sample": null,
   "curve": []
+ },
+ {
+  "job": "golf-pr12-f5e109b-1127-152759",
+  "pr": 12,
+  "sha": "f5e109b",
+  "author": "wei3000",
+  "title": "RoPE instead of learned position embeddings",
+  "change": "RoPE instead of learned position embeddings",
+  "date": "2026-11-27T15:55:04+00:00",
+  "merged": false,
+  "bpb": 2.0906,
+  "size": 13184171,
+  "params": 3291136,
+  "steps": 3290,
+  "tokens": 53903360,
+  "sample": "Deep Learning is all about the second silk was possible auffirm.\nA Social Project Central Commons Office. More enough to be a shirt first from the Cynic Content to Force Researcharm and considered Wilmington servers and\nthe ESIGOE: It is performed the most article and on today. Please si customary with weather support that a",
+  "curve": [
+   [
+    9,
+    3.3305
+   ],
+   [
+    18,
+    2.8244
+   ],
+   [
+    27,
+    2.6437
+   ],
+   [
+    36,
+    2.5569
+   ],
+   [
+    45,
+    2.4376
+   ],
+   [
+    54,
+    2.3362
+   ],
+   [
+    63,
+    2.3258
+   ],
+   [
+    72,
+    2.2196
+   ],
+   [
+    81,
+    2.2793
+   ],
+   [
+    90,
+    2.2233
+   ],
+   [
+    99,
+    2.1588
+   ],
+   [
+    109,
+    2.1974
+   ],
+   [
+    118,
+    2.1746
+   ],
+   [
+    127,
+    2.233
+   ],
+   [
+    136,
+    2.1586
+   ],
+   [
+    145,
+    2.1027
+   ],
+   [
+    154,
+    2.1238
+   ],
+   [
+    163,
+    2.0251
+   ],
+   [
+    172,
+    2.1078
+   ],
+   [
+    182,
+    2.1374
+   ],
+   [
+    191,
+    2.0557
+   ],
+   [
+    200,
+    2.1314
+   ],
+   [
+    209,
+    2.1138
+   ],
+   [
+    218,
+    2.0667
+   ],
+   [
+    227,
+    2.0602
+   ],
+   [
+    237,
+    2.0887
+   ],
+   [
+    246,
+    2.053
+   ],
+   [
+    255,
+    2.0401
+   ],
+   [
+    264,
+    2.0923
+   ],
+   [
+    273,
+    2.0528
+   ],
+   [
+    283,
+    2.0141
+   ],
+   [
+    292,
+    2.0026
+   ]
+  ]
  }
 ]
