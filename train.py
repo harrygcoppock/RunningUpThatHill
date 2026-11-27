@@ -17,8 +17,8 @@ from tokenizer import load_tokenizer
 class Muon(torch.optim.Optimizer):
     """Single-device Muon; https://github.com/KellerJordan/Muon."""
 
-    def __init__(self, params, lr=0.02, momentum=0.95, weight_decay=0.01):
-        super().__init__(params, dict(lr=lr, momentum=momentum, weight_decay=weight_decay))
+    def __init__(self, params, lr=0.02, momentum=0.95, beta2=0.95, weight_decay=0.01):
+        super().__init__(params, dict(lr=lr, momentum=momentum, beta2=beta2, weight_decay=weight_decay))
 
     @torch.no_grad()
     def step(self):
@@ -43,6 +43,14 @@ class Muon(torch.optim.Optimizer):
                     x = 3.4445 * x + b @ x
                 if p.size(0) > p.size(1):
                     x = x.T
+                # NorMuon: per-row adaptive second-moment normalization with norm preservation
+                if "second_momentum_buffer" not in state:
+                    state["second_momentum_buffer"] = torch.zeros(x.size(0), 1, device=p.device, dtype=torch.float32)
+                xf = x.float()
+                buf2 = state["second_momentum_buffer"]
+                buf2.lerp_(xf.square().mean(dim=-1, keepdim=True), 1 - group["beta2"])
+                scaled = xf * buf2.clamp_min(1e-10).rsqrt()
+                x = (scaled * (xf.norm() / scaled.norm().clamp_min(1e-10))).to(p.dtype)
                 x *= max(1, p.size(0) / p.size(1)) ** 0.5
                 p.mul_(1 - group["lr"] * group["weight_decay"])
                 p.add_(x, alpha=-group["lr"])
