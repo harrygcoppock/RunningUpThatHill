@@ -680,5 +680,155 @@
     2.0812
    ]
   ]
+ },
+ {
+  "job": "golf-pr11-0a214c0-1127-122015",
+  "pr": 11,
+  "sha": "0a214c0",
+  "author": "dorianturner",
+  "title": "Use Muon for hidden-layer weight matrices",
+  "change": "use Muon for hidden-layer weight matrices, with AdamW for the remaining parameters.",
+  "date": "2026-11-27T12:44:47+00:00",
+  "merged": false,
+  "bpb": 1.9992,
+  "size": 13445659,
+  "params": 3356672,
+  "steps": 3390,
+  "tokens": 55541760,
+  "sample": "Deep Learning is all about the second silver of our period. Some of this personal service and salutor rating teen signing the service as a possible information itself, including a monitor.\nGod to improve the service and\nthe street for the erase of the most possible reform of children\u2019s customers, and we need to take the en",
+  "curve": [
+   [
+    9,
+    3.4277
+   ],
+   [
+    18,
+    2.674
+   ],
+   [
+    26,
+    2.4395
+   ],
+   [
+    35,
+    2.409
+   ],
+   [
+    44,
+    2.291
+   ],
+   [
+    52,
+    2.2033
+   ],
+   [
+    61,
+    2.219
+   ],
+   [
+    69,
+    2.1143
+   ],
+   [
+    78,
+    2.1864
+   ],
+   [
+    87,
+    2.129
+   ],
+   [
+    96,
+    2.0672
+   ],
+   [
+    104,
+    2.1229
+   ],
+   [
+    113,
+    2.0974
+   ],
+   [
+    122,
+    2.1691
+   ],
+   [
+    131,
+    2.0993
+   ],
+   [
+    140,
+    2.0522
+   ],
+   [
+    149,
+    2.0716
+   ],
+   [
+    157,
+    1.9657
+   ],
+   [
+    166,
+    2.042
+   ],
+   [
+    175,
+    2.075
+   ],
+   [
+    184,
+    1.995
+   ],
+   [
+    193,
+    2.0661
+   ],
+   [
+    202,
+    2.0387
+   ],
+   [
+    211,
+    2.0123
+   ],
+   [
+    220,
+    1.9973
+   ],
+   [
+    229,
+    2.014
+   ],
+   [
+    238,
+    1.9889
+   ],
+   [
+    247,
+    1.955
+   ],
+   [
+    256,
+    2.0066
+   ],
+   [
+    265,
+    1.9765
+   ],
+   [
+    274,
+    1.9308
+   ],
+   [
+    283,
+    1.9231
+   ],
+   [
+    292,
+    1.9083
+   ]
+  ]
  }
 ]
